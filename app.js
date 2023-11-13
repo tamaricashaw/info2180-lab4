@@ -1,28 +1,26 @@
-let allButtons = document.getElementsByTagName("button");
-let searchButton = "search";
+document.addEventListener("DOMContentLoaded", function() {
+    let user_input=document.querySelector("input");
+    let form = document.querySelector("form");
+    let result= document.querySelector("#result");
 
-for (let b = 0; b < allButtons.length; b++) {
-    if (allButtons[b].classList.contains(searchButton)) {
-        let target = allButtons[b];
+    form.addEventListener("click", function(event){
 
-        target.addEventListener("click", function(){
-            let url = "http://localhost/info2180-lab4/superheroes.php";
+        event.preventDefault();
+        let input = user_input.value.trim();
+        
+        let url = `/superheroes.php?name=${input}`
+        fetch(url)
+        .then(res => {if (res.ok){return res.text()}
+        else{return Promise.reject('Error occurred')}})
+        .then(data =>{
+            result.innerHTML = data
+        }).catch(error => {
+                console.log('Error fetching data:', error);
+            });
+    });
 
-            fetch(url)
-                .then(function (response){
-                    if (!response.ok){
-                        throw new Error("Response was not ok");
-                    }
-                    return response.text();
-                })
-                .then(function (data){
-                    alert(data);
-                })
-                .catch (function (error){
-                    console.error("Fetch error", error);
-                })
-         })
-    }    
-}
+});
+
+
 
 
